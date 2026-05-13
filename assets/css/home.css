@@ -184,16 +184,6 @@ button {
   text-align: center;
 }
 
-@keyframes brands-marquee {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
 /* Media Queries */
 
 @media screen and (max-width: 1200px) {
@@ -578,7 +568,8 @@ button {
   }
 
   .brands__marquee-track.brands__marquee-track--animating {
-    animation: brands-marquee 10s linear infinite;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .brands__marquee-set {
@@ -598,12 +589,6 @@ button {
     object-fit: contain;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .brands__marquee-track.brands__marquee-track--animating {
-      animation: none;
-      transform: none;
-    }
-  }
 }
 
 /* .hero-section {
