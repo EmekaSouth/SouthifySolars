@@ -1,0 +1,156 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+  /* Color */
+  --blue: #36689e;
+  --light-blue: #f3fafa;
+  --black: #000000;
+  --blue-black: #252b42;
+  --slate-grey: #7c8893;
+  --grey: #e4e7ec;
+  --white: #ffffff;
+  --box-shadow: 0px 12.35px 25.69px 0px #36689e29;
+  --btn-shadow: 12.35px 12.35px 24.69px 0px #00000000;
+  --card-shadow: 8px 10px 20px 1px #98989829;
+  --form-shadow: 0px 5px 30px 0px #0000000d;
+
+  /* Font Family */
+  --inter: "Inter", system-ui, sans-serif;
+  --roboto: "Roboto", system-ui, sans-serif;
+  --space-grotesk: "Space Grotesk", system-ui, sans-serif;
+  --poppins: "Poppins", system-ui, sans-serif;
+
+  /* Font Sizes */
+  --small: ;
+  --medium: ;
+  --large: font-size: clamp(2rem, 6vw, 3rem);
+
+  /* Border Radius Sizes */
+  --radius-sm: 5px;
+  --radius-md: 12px;
+  --radius-lg: 15px;
+
+  /* Padding Values */
+  --padding-section: 15px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--white);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  position: relative;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+input {
+  border: none;
+  background-color: #f4f4f4;
+  border-radius: var(--radius-sm);
+}
+
+.contact__content-text {
+  display: none;
+}
+
+@media screen and (max-width: 1200px) {
+}
+
+@media screen and (max-width: 865px) {
+  .contact__img {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 630px) {
+  .contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .contact__container {
+    padding: var(--padding-section);
+  }
+
+  .contact__content {
+    padding: var(--padding-section);
+    margin-top: -20px;
+  }
+
+  .contact__content-title {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    font-family: var(--roboto);
+    font-size: 25px;
+    color: var(--blue-black);
+  }
+
+  .contact__contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .contact__name-box,
+  .contact__email-box {
+    padding: 22px;
+    box-shadow: var(--form-shadow);
+  }
+
+  .contact__name-box::placeholder,
+  .contact__email-box::placeholder {
+    font-family: var(--roboto);
+    font-weight: 500;
+    font-size: 1.01rem;
+    color: #858c94;
+  }
+
+  .contact__submit-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .contact__submit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+    padding: 1rem 3rem;
+    background-color: var(--blue);
+    color: var(--white);
+    border-radius: var(--radius-sm);
+  }
+}
