@@ -14,7 +14,7 @@
     />
     <title>Southify Solars - Contact Us</title>
     <link rel="stylesheet" href="assets/css/header.css" />
-    <link rel="stylesheet" href="assets/css/home.css" />
+    <link rel="stylesheet" href="assets/css/contact.css" />
     <link rel="stylesheet" href="assets/css/footer.css" />
   </head>
   <body>
@@ -89,13 +89,15 @@
               required
               autocomplete="tel"
             />
-            <input
-              class="contactus__form-message"
-              type="text"
-              placeholder="Message"
-              required
-            />
-            <button type="submit">Submit</button>
+            <textarea
+            class="contactus__form__messages"
+            name="message"
+            id="message"
+            cols="10"
+            rows="6"
+            placeholder="Messages"
+          ></textarea>
+            <button class="contactus__submit"  type="submit">Submit</button>
           </form>
         </div>
       </section>

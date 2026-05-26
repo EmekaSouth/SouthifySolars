@@ -6,6 +6,8 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap");
+
 :root {
   /* Color */
   --blue: #36689e;
@@ -25,6 +27,7 @@
   --roboto: "Roboto", system-ui, sans-serif;
   --space-grotesk: "Space Grotesk", system-ui, sans-serif;
   --poppins: "Poppins", system-ui, sans-serif;
+  --monsterrat: "Montserrat", system-ui, sans-serif;
 
   /* Font Sizes */
   --small: ;
@@ -69,7 +72,7 @@ button {
   border: none;
 }
 
-input {
+input, textarea {
   border: none;
   background-color: #f4f4f4;
   border-radius: var(--radius-sm);
@@ -89,6 +92,64 @@ input {
 }
 
 @media screen and (max-width: 630px) {
+  .contactus {
+    padding: var(--padding-section);
+    margin-bottom: 40px;
+  }
+
+  .contactus__title {
+    font-family: var(--monsterrat);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .contactus__form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .contactus__form-name, .contactus__form-email, .contactus__form-number {
+    padding: 1.5rem;
+    font-family: var(--monsterrat);
+    font-weight: 500;
+    font-size: 1rem;
+    color: #101010e0;
+  }
+
+  .contactus__form-name::placeholder, .contactus__form-email::placeholder, .contactus__form-number::placeholder {
+    font-family: var(--monsterrat);
+    font-weight: 500;
+    font-size: 1rem;
+  }
+
+  .contactus__form__messages {
+    padding: 1.5rem;
+    font-family: var(--monsterrat);
+    font-weight: 500;
+    font-size: 1rem;
+    resize: none;
+  }
+
+  .contactus__submit {
+    padding: 1rem;
+    background-color: #0065A4;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .map {
+    margin-bottom: 40px;
+  }
+
+  .map img {
+    height: 250px;
+  }
+
+  /* Subpage Styles */
   .contact {
     display: flex;
     flex-direction: column;
@@ -96,6 +157,7 @@ input {
     align-items: center;
     margin-bottom: 20px;
   }
+  
 
   .contact__container {
     padding: var(--padding-section);
@@ -153,4 +215,5 @@ input {
     color: var(--white);
     border-radius: var(--radius-sm);
   }
+
 }
