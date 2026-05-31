@@ -1,0 +1,17 @@
+- fix the view solutions button in the res and com pages.
+
+- restructure and clean the entire codebase. 
+
+- add javascript interactivity throughout all the pages.
+
+- make sure the website is responsive across all breakpoints.
+
+- make a feature where users can send an email directly to me through the website.
+
+- make a feature where users can change the language of the website.
+
+- make a dark mode option for the website. (optional)
+
+- make a clamp for the font size for the entire website so that it automatically adjusts in all breakpoints.
+
+- add favicon to the website.

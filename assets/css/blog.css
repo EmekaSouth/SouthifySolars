@@ -85,7 +85,6 @@ button {
 
   .blog__topic1 {
     margin-bottom: 50px;
-
   }
 
   .blog__topic-title {
@@ -96,7 +95,7 @@ button {
   }
 
   .blog__topic2 .blog__topic-title {
-    text-decoration: 3px solid #0065A4;
+    text-decoration: 3px solid #0065a4;
   }
 
   .blog__img-1 {
@@ -122,13 +121,11 @@ button {
   .blog__topic-text a {
     text-decoration: none;
   }
-  
+
   .blog__topic-img {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     margin-bottom: 20px;
   }
-
-  
 }

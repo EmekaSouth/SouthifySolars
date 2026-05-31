@@ -46,6 +46,7 @@
 
   /* Padding Values */
   --padding-section: 15px;
+  --padding-section-pc: 70px;
 }
 
 /* Resets */
@@ -88,15 +89,117 @@ button {
 .hero__title h1 {
   font-size: var(--big);
   font-family: var(--roboto);
+  margin-bottom: 20px;
 }
 
 .hero__title h5 {
+  font-family: var(--roboto);
   font-size: 1.05rem;
   font-weight: 400;
   line-height: 24px;
+  margin-bottom: 40px;
+}
+
+.hero__btn {
+  padding: 15px 20px;
+  border-radius: var(--radius-sm);
+  background-color: var(--blue);
+  color: var(--white);
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: var(--space-grotesk);
+}
+
+.hero__btn--small {
+  font-size: 1rem;
+  padding: 15px;
+  box-shadow: 12.35px 12.35px 24.69px 0px #0000001a;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: row;
+  padding: 10rem;
+  gap: 1rem;
+  margin-top: -190px;
+}
+
+.hero__title {
+  padding: 1rem;
+  margin-top: 100px;
+}
+
+.hero__eclipse-img1 {
+  position: absolute;
+  top: 326px;
+  left: 30px;
+  z-index: -1;
+}
+
+.hero__eclipse-img2 {
+  position: absolute;
+  top: 120px;
+  right: 120px;
+  z-index: -1;
+  width: 230px;
+}
+
+.hero__eclipse-img3 {
+  position: absolute;
+  top: 550.35px;
+  right: 535.43px;
+  z-index: -1;
+}
+
+.hero__bar {
+  margin-top: -130px;
+  margin-bottom: 150px;
+}
+
+.hero__bar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10rem;
+  background-color: #ffffff;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--radius-md);
+  padding: 30px 20px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.hero__bar-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.hero__bar-title {
+  font-family: var(--space-grotesk);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--blue);
+}
+
+.hero__bar-sub {
+  font-family: var(--space-grotesk);
+  font-weight: 400;
+  font-size: 1rem;
+  color: #000000a2;
+}
+
+.hero__bar-sub a {
+  color: #000000a2;
 }
 
 /* Advantages Section PC */
+
+.adv {
+  margin-bottom: 150px;
+}
 
 .adv__card-title {
   font-weight: 500;
@@ -129,6 +232,21 @@ button {
   opacity: 65%;
 }
 
+.adv__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10rem;
+}
+
+.adv__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Why Choose Us Section PC */
 
 .why__title {
@@ -155,6 +273,13 @@ button {
   text-align: center;
 }
 
+.why__content {
+  display: flex;
+  padding: 10rem;
+}
+
+
+
 /* Media Queries */
 
 @media screen and (max-width: 1200px) {
@@ -168,11 +293,27 @@ button {
 
   .hero {
     padding: var(--padding-section);
-    margin-bottom: 50px;
+    margin-bottom: 45px;
+  }
+
+  .hero__content {
+    display: block;
+    padding: var(--padding-section);
+    margin: 0;
   }
 
   .hero__title {
-    margin-bottom: 15px;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 25px;
+  }
+
+  .hero__title h1 {
+    margin-bottom: 10px !important;
+  }
+
+  .hero__title h5 {
+    margin-bottom: 30px !important;
   }
 
   .hero__title h1 {
@@ -187,7 +328,7 @@ button {
   }
 
   .hero__btn {
-    padding: 12px 6px;
+    padding: 12px 15px;
     border-radius: var(--radius-sm);
     background-color: var(--blue);
     color: var(--white);
@@ -209,13 +350,20 @@ button {
     margin-bottom: 100px;
   }
 
+  .adv__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
   .adv__card {
     padding: var(--padding-section);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 40px;
   }
 
   .adv__card-img {
@@ -547,7 +695,6 @@ button {
     height: auto;
     object-fit: contain;
   }
-
 }
 
 /* .hero-section {
