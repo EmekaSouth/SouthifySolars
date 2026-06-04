@@ -72,7 +72,9 @@
         <img src="assets/images/Hero-Img-2.png" alt="" class="hero__img-2" />
         <div class="hero__content">
           <h1 class="hero__title">Residential Solar</h1>
-          <a href="#solutions" class="hero__link">View Solutions</a>
+          <div class="hero__link-container">
+            <a href="#solutions" class="hero__link">View Solutions</a>
+          </div>
           <div class="hero__img-container">
             <img src="assets/images/hero-subimage-1.png" alt="" />
             <img src="assets/images/hero-subimage-2.png" alt="" />
@@ -299,40 +301,45 @@
             class="contact__img"
             loading="lazy"
           />
-          <div class="contact__content">
-            <h2 class="contact__content-title">
-              Straight from our desk, to your Inbox.
-            </h2>
-            <p class="contact__content-text">
-              Subscribe to our latest coming newsletter of solar panel
-            </p>
-          </div>
-          <div class="contact__contact-box">
-            <form action="get" class="contact__contact-form">
-              <input
-                class="contact__name-box"
-                type="text"
-                placeholder="Your Full Name"
-                autocomplete="name"
-                required
-              />
-              <input
-                class="contact__email-box"
-                type="email"
-                placeholder="Your Email"
-                autocomplete="email"
-                required
-              />
-              <div class="contact__submit-container">
-                <button type="submit" class="contact__submit-btn">
-                  Subscribe
-                </button>
-              </div>
-            </form>
+          <div class="contact__content-container">
+            <div class="contact__content">
+              <h2 class="contact__content-title">
+                Straight from our desk, to your Inbox.
+              </h2>
+              <p class="contact__content-text">
+                Subscribe to our latest coming newsletter of solar panel
+              </p>
+            </div>
+            <div class="contact__contact-box">
+              <form action="get" class="contact__contact-form">
+                <input
+                  class="contact__name-box"
+                  type="text"
+                  placeholder="Your Full Name"
+                  autocomplete="name"
+                  required
+                />
+                <input
+                  class="contact__email-box"
+                  type="email"
+                  placeholder="Your Email"
+                  autocomplete="email"
+                  required
+                />
+                <div class="contact__submit-container">
+                  <button type="submit" class="contact__submit-btn">
+                    Subscribe
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </section>
     </main>
+
+    <!-- Footer Section -->
+
     <footer class="footer">
       <div class="footer__container">
         <div class="footer__content">
@@ -340,7 +347,7 @@
             <div class="footer__content-start-img">
               <img src="assets/images/logo.png" alt="" loading="lazy" />
             </div>
-            <p>
+            <p class="footer__start-text">
               We are a reliable and experienced solar company that offers
               affordable and sustainable energy solutions, customized to fit
               your unique needs.
@@ -359,7 +366,7 @@
           </div>
           <div class="footer__content-links">
             <h4 class="footer__content-title">Links</h4>
-            <ul>
+            <ul class="footer__links-container">
               <li><a href="home.html" class="footer__links">Home</a></li>
               <li>
                 <a href="commercial.html" class="footer__links"
@@ -379,20 +386,30 @@
           </div>
           <div class="footer__content-services">
             <h4 class="footer__content-title">Services</h4>
-            <ul>
-              <li><a href="#" class="footer__links">Solar System Design</a></li>
-              <li><a href="#" class="footer__links">Procurement</a></li>
+            <ul class="footer__links-container">
               <li>
-                <a href="#" class="footer__links">Solar Panel Installations</a>
+                <a href="commercial.html" class="footer__links"
+                  >Solar System Design</a
+                >
               </li>
               <li>
-                <a href="#" class="footer__links">Operations and Maintenance</a>
+                <a href="commercial.html" class="footer__links">Procurement</a>
+              </li>
+              <li>
+                <a href="residential.html" class="footer__links"
+                  >Solar Panel Installations</a
+                >
+              </li>
+              <li>
+                <a href="residential.html" class="footer__links"
+                  >Operations and Maintenance</a
+                >
               </li>
             </ul>
           </div>
           <div class="footer__content-lang">
             <h4 class="footer__content-title">Languages</h4>
-            <ul>
+            <ul class="footer__links-container">
               <li>English</li>
               <li>Arabic</li>
               <li>French</li>
@@ -401,7 +418,8 @@
         </div>
         <div class="footer__bottom">
           <p class="footer__bottom-text">
-            &copy;2026 SouthifySolars. Developed By <i><b>South</b></i
+            &copy;2026 SouthifySolars. Developed By
+            <i><b class="southEmeka">South</b></i
             >.
           </p>
         </div>

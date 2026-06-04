@@ -238,3 +238,168 @@
 
   mq.addEventListener("change", apply);
 })();
+
+(function () {
+  var FORM_ENDPOINT =
+    "https://formsubmit.co/ajax/chukwuemekaobama3@gmail.com";
+  var TOAST_VISIBLE_MS = 4500;
+  var TOAST_ANIM_MS = 350;
+
+  function initContactForm() {
+    var form = document.querySelector("[data-contact-form]");
+    if (!form) {
+      return;
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var submitBtn = form.querySelector(".contactus__submit");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+      }
+
+      var nameEl = form.querySelector(".contactus__form-name");
+      var emailEl = form.querySelector(".contactus__form-email");
+      var phoneEl = form.querySelector(".contactus__form-number");
+      var messageEl = form.querySelector(".contactus__form__messages");
+
+      fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: nameEl ? nameEl.value.trim() : "",
+          email: emailEl ? emailEl.value.trim() : "",
+          phone: phoneEl ? phoneEl.value.trim() : "",
+          message: messageEl ? messageEl.value.trim() : "",
+          _subject: "New Contact — Southify Solars",
+          _template: "table",
+        }),
+      })
+        .then(function (response) {
+          return response.json().then(function (data) {
+            return { ok: response.ok, data: data };
+          });
+        })
+        .then(function (result) {
+          if (isFormSubmitSuccess(result.data)) {
+            form.reset();
+            showFormToast("success");
+            return;
+          }
+          showFormToast("error", getFormSubmitErrorMessage(result.data));
+        })
+        .catch(function () {
+          showFormToast(
+            "error",
+            "Please check your internet connection and try again.",
+          );
+        })
+        .finally(function () {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+          }
+        });
+    });
+  }
+
+  function isFormSubmitSuccess(data) {
+    if (!data) {
+      return false;
+    }
+    var success = data.success;
+    return success === true || success === "true";
+  }
+
+  function getFormSubmitErrorMessage(data) {
+    if (data && data.message) {
+      var msg = String(data.message);
+      if (/web server|html files/i.test(msg)) {
+        return "This form must be opened through a web server (for example, Live Server), not as a local file.";
+      }
+      if (/activate|confirmation/i.test(msg)) {
+        return "Email delivery is not active yet. Please confirm the activation link sent to the site owner’s inbox, then try again.";
+      }
+      return msg;
+    }
+    return "Something went wrong while sending your message. Please try again shortly.";
+  }
+
+  var TOAST_ICONS = {
+    success:
+      '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>',
+    error:
+      '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>',
+  };
+
+  var TOAST_COPY = {
+    success: {
+      title: "Message Sent Successfully!",
+      text: "Your message has been delivered. We will get back to you soon.",
+    },
+    error: {
+      title: "Unable to Send Message",
+      text: "Something went wrong while sending your message. Please try again shortly.",
+    },
+  };
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function showFormToast(type, textOverride) {
+    var existing = document.querySelector(".form-toast");
+    if (existing) {
+      existing.remove();
+    }
+
+    var copy = TOAST_COPY[type] || TOAST_COPY.error;
+    var iconPath = TOAST_ICONS[type] || TOAST_ICONS.error;
+    var modifier = type === "success" ? "" : " form-toast--error";
+
+    var toast = document.createElement("div");
+    toast.className = "form-toast" + modifier;
+    toast.setAttribute("role", "alert");
+    toast.setAttribute("aria-live", "polite");
+    toast.innerHTML =
+      '<svg class="form-toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">' +
+      iconPath +
+      "</svg>" +
+      '<div class="form-toast__body">' +
+      '<p class="form-toast__title">' +
+      copy.title +
+      "</p>" +
+      '<p class="form-toast__text">' +
+      escapeHtml(textOverride || copy.text) +
+      "</p>" +
+      "</div>";
+
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(function () {
+      toast.classList.add("form-toast--visible");
+    });
+
+    window.setTimeout(function () {
+      toast.classList.remove("form-toast--visible");
+      toast.classList.add("form-toast--leaving");
+    }, TOAST_VISIBLE_MS);
+
+    window.setTimeout(function () {
+      toast.remove();
+    }, TOAST_VISIBLE_MS + TOAST_ANIM_MS);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initContactForm);
+  } else {
+    initContactForm();
+  }
+})();
