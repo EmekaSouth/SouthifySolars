@@ -107,14 +107,14 @@ button {
 }
 
 .hero__title h1 {
-  font-size: var(--big);
+  font-size: var(--fs-extra-large);
   font-family: var(--roboto);
   margin-bottom: 20px;
 }
 
 .hero__title h5 {
   font-family: var(--roboto);
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: 400;
   line-height: 24px;
   margin-bottom: 40px;
@@ -518,10 +518,10 @@ button {
 
 @media screen and (max-width: 1399px) {
   .hero__content {
-    flex-wrap: wrap;
     padding: clamp(1rem, 7vw, 10rem);
     gap: var(--content-gap);
     margin-top: clamp(-5rem, -12vw, -11.875rem);
+    margin-bottom: 100px;
   }
 
   .hero__btn {
@@ -530,7 +530,6 @@ button {
   }
 
   .hero__bar-wrapper {
-    flex-wrap: wrap;
     gap: clamp(2rem, 7vw, 10rem);
     padding: clamp(1.25rem, 2.5vw, 1.875rem) clamp(2rem, 7vw, 6.25rem);
     width: min(100%, 1100px);
@@ -606,7 +605,9 @@ button {
   }
 
   .hero__bar-wrapper {
+    flex-wrap: wrap;
     width: min(100%, 960px);
+    justify-content: center;
   }
 
   .hero__bar-content {
@@ -624,6 +625,7 @@ button {
 
 @media screen and (max-width: 865px) {
   .hero__content {
+    margin-top: -40px;
     flex-direction: column;
     align-items: center;
   }

@@ -310,7 +310,7 @@ button {
   }
 
   .hero__content {
-    margin-top: clamp(-12rem, -28vw, -25rem);
+    margin-top: clamp(-20rem, -28vw, -25rem);
     width: 100%;
   }
 
@@ -319,6 +319,7 @@ button {
     justify-content: center;
     gap: var(--content-gap);
     padding-inline: var(--padding-section);
+    margin-top: -50px;
   }
 
   .hero__img-container img {
@@ -334,7 +335,6 @@ button {
   .solutions__text-start {
     margin-right: clamp(0px, 3vw, 50px);
     padding: clamp(1rem, 2vw, 2rem);
-    flex: 1 1 280px;
     max-width: 100%;
   }
 
@@ -381,11 +381,16 @@ button {
   }
 
   .hero__content {
-    margin-top: clamp(-10rem, -22vw, -8rem);
+    margin-top: clamp(-14rem, -22vw, -20rem);
   }
 
   .solutions__content {
     flex-direction: column;
+  }
+
+  .solutions__link-container {
+    display: flex;
+    justify-content: center;
   }
 
   .solutions__text-start {
@@ -402,7 +407,7 @@ button {
 
   .solutions__card-container {
     grid-template-columns: 1fr;
-    width: 100%;
+    width: auto;
   }
 
   .portfolio__card-container {
