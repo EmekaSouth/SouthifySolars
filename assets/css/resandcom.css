@@ -336,6 +336,10 @@ button {
     margin-right: clamp(0px, 3vw, 50px);
     padding: clamp(1rem, 2vw, 2rem);
     max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .solutions__text-start h2 {
@@ -351,7 +355,6 @@ button {
   .solutions__card-container {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--content-gap);
-    flex: 1 1 320px;
     max-width: 100%;
   }
 

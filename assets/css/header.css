@@ -199,7 +199,13 @@ body.menu-open {
   }
 
   .header__navlinks {
-    padding-right: clamp(13rem, 22vw, 18rem);
+    padding-right: 20rem !important;
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  .header__navlinks {
+    padding-right: 25rem !important;
   }
 }
 
