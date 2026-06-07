@@ -1,9 +1,0 @@
-- restructure and clean the entire codebase by removing un-necessary/ repeating code without breaking the project. (Position the CSS declarations properly. (the code will be arranged how the html is arranged, so nothing comes after another) and Make the units for each rule to be consistent. (so basically, every padding uses the REM unit instead of REM and px mixed together)) 
-
-- add javascript interactivity throughout all the pages.
-
-- make a feature where users can change the language of the website.
-
-- make a dark mode option for the website. (optional)
-
-- add favicon to the website.
