@@ -19,7 +19,7 @@
       dotsEl.appendChild(dot);
     }
 
-    var dots = dotsEl.querySelectorAll('.testimonial__carousel-dot');
+    var dots = dotsEl.querySelectorAll(".testimonial__carousel-dot");
 
     function activeIndex() {
       var w = viewport.clientWidth || 1;
@@ -33,80 +33,39 @@
       var i = activeIndex();
       for (var j = 0; j < dots.length; j++) {
         if (j === i) {
-          dots[j].classList.add('testimonial__carousel-dot--active');
+          dots[j].classList.add("testimonial__carousel-dot--active");
         } else {
-          dots[j].classList.remove('testimonial__carousel-dot--active');
+          dots[j].classList.remove("testimonial__carousel-dot--active");
         }
       }
     }
 
-    function onScroll() { syncDots(); }
-    viewport.addEventListener('scroll', onScroll, { passive: true });
+    function onScroll() {
+      syncDots();
+    }
+    viewport.addEventListener("scroll", onScroll, { passive: true });
 
     function onDotClick(e) {
       var t = e.target;
-      if (!t || !t.matches('.testimonial__carousel-dot')) return;
-      var idx = Number(t.getAttribute('data-index')) || 0;
+      if (!t || !t.matches(".testimonial__carousel-dot")) return;
+      var idx = Number(t.getAttribute("data-index")) || 0;
       var left = idx * (viewport.clientWidth || 0);
       try {
-        viewport.scrollTo({ left: left, behavior: 'smooth' });
+        viewport.scrollTo({ left: left, behavior: "smooth" });
       } catch (err) {
         viewport.scrollLeft = left;
       }
     }
 
-    dotsEl.addEventListener('click', onDotClick);
+    dotsEl.addEventListener("click", onDotClick);
 
     // initial sync
     syncDots();
 
-    // iOS-specific fallback: some Safari versions handle touch/scroll differently.
-    var isiOS = typeof navigator !== 'undefined' && (/iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform && /iP/.test(navigator.platform)));
-    var _iosDown = false;
-    var _iosStartX = 0;
-    var _iosStartScroll = 0;
-
-    function _iosTouchStart(e) {
-      if (!isiOS) return;
-      if (!e.touches || e.touches.length === 0) return;
-      _iosDown = true;
-      _iosStartX = e.touches[0].clientX;
-      _iosStartScroll = viewport.scrollLeft;
-    }
-
-    function _iosTouchMove(e) {
-      if (!isiOS || !_iosDown) return;
-      if (!e.touches || e.touches.length === 0) return;
-      var clientX = e.touches[0].clientX;
-      var dx = clientX - _iosStartX;
-      if (Math.abs(dx) > 4) {
-        // prevent vertical bounce while swiping horizontally
-        if (e.cancelable) e.preventDefault();
-        viewport.scrollLeft = _iosStartScroll - dx;
-      }
-    }
-
-    function _iosTouchEnd(e) {
-      if (!isiOS) return;
-      _iosDown = false;
-      syncDots();
-    }
-
-    if (isiOS) {
-      viewport.addEventListener('touchstart', _iosTouchStart, { passive: true });
-      viewport.addEventListener('touchmove', _iosTouchMove, { passive: false });
-      viewport.addEventListener('touchend', _iosTouchEnd, { passive: true });
-    }
-
     return function teardown() {
-      viewport.removeEventListener('scroll', onScroll);
-      dotsEl.removeEventListener('click', onDotClick);
-      if (isiOS) {
-        viewport.removeEventListener('touchstart', _iosTouchStart);
-        viewport.removeEventListener('touchmove', _iosTouchMove);
-        viewport.removeEventListener('touchend', _iosTouchEnd);
-      }
-      dotsEl.innerHTML = '';
+      viewport.removeEventListener("scroll", onScroll);
+      dotsEl.removeEventListener("click", onDotClick);
+      dotsEl.innerHTML = "";
     };
   }
 

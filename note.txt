@@ -7,8 +7,3 @@
 - make a dark mode option for the website. (optional)
 
 - add favicon to the website.
-
-- Comment Sections in all CSS files.
-
-
-- 
