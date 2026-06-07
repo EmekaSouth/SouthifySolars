@@ -3,18 +3,14 @@
 
   function initTestimonialCarousel() {
     var root = document.querySelector("[data-testimonial-carousel]");
-    if (!root) {
-      return function () {};
-    }
+    if (!root) return function () {};
 
     var viewport = root.querySelector(".testimonial__carousel-viewport");
     var dotsEl = root.querySelector(".testimonial__carousel-dots");
     var slides = root.querySelectorAll(".testimonial__card");
+    if (!viewport || !dotsEl || slides.length === 0) return function () {};
 
-    if (!viewport || !dotsEl || slides.length === 0) {
-      return function () {};
-    }
-
+    // build dots
     dotsEl.innerHTML = "";
     for (var i = 0; i < slides.length; i++) {
       var dot = document.createElement("span");
@@ -23,17 +19,13 @@
       dotsEl.appendChild(dot);
     }
 
-    var dots = dotsEl.querySelectorAll(".testimonial__carousel-dot");
+    var dots = dotsEl.querySelectorAll('.testimonial__carousel-dot');
 
     function activeIndex() {
       var w = viewport.clientWidth || 1;
-      var idx = Math.round(viewport.scrollLeft / w);
-      if (idx < 0) {
-        idx = 0;
-      }
-      if (idx > slides.length - 1) {
-        idx = slides.length - 1;
-      }
+      var idx = Math.round((viewport.scrollLeft || 0) / w);
+      if (idx < 0) idx = 0;
+      if (idx > slides.length - 1) idx = slides.length - 1;
       return idx;
     }
 
@@ -41,141 +33,37 @@
       var i = activeIndex();
       for (var j = 0; j < dots.length; j++) {
         if (j === i) {
-          dots[j].classList.add("testimonial__carousel-dot--active");
+          dots[j].classList.add('testimonial__carousel-dot--active');
         } else {
-          dots[j].classList.remove("testimonial__carousel-dot--active");
+          dots[j].classList.remove('testimonial__carousel-dot--active');
         }
       }
     }
 
-    function onScroll() {
-      syncDots();
-    }
+    function onScroll() { syncDots(); }
+    viewport.addEventListener('scroll', onScroll, { passive: true });
 
-    viewport.addEventListener("scroll", onScroll, { passive: true });
-
-    var _isPointerDown = false;
-    var _startX = 0;
-    var _startScroll = 0;
-    var autoTimer = null;
-    var AUTO_MS = 5000; // 5 seconds
-
-    function nextSlide() {
-      var i = activeIndex();
-      var nxt = (i + 1) % slides.length;
-      var left = nxt * (viewport.clientWidth || 0);
+    function onDotClick(e) {
+      var t = e.target;
+      if (!t || !t.matches('.testimonial__carousel-dot')) return;
+      var idx = Number(t.getAttribute('data-index')) || 0;
+      var left = idx * (viewport.clientWidth || 0);
       try {
-        viewport.scrollTo({ left: left, behavior: "smooth" });
+        viewport.scrollTo({ left: left, behavior: 'smooth' });
       } catch (err) {
         viewport.scrollLeft = left;
       }
     }
 
-    function stopAuto() {
-      if (autoTimer) {
-        clearInterval(autoTimer);
-        autoTimer = null;
-      }
-    }
+    dotsEl.addEventListener('click', onDotClick);
 
-    function startAuto() {
-      stopAuto();
-      autoTimer = setInterval(nextSlide, AUTO_MS);
-    }
-
-    function _onPointerDown(e) {
-      stopAuto();
-      _isPointerDown = true;
-      try {
-        viewport.setPointerCapture(e.pointerId);
-      } catch (err) {}
-      _startX =
-        e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
-      _startScroll = viewport.scrollLeft;
-    }
-
-    function _onPointerMove(e) {
-      if (!_isPointerDown) return;
-      var clientX =
-        e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
-      var dx = clientX - _startX;
-      viewport.scrollLeft = _startScroll - dx;
-    }
-
-    function _onPointerUp(e) {
-      _isPointerDown = false;
-      try {
-        viewport.releasePointerCapture &&
-          viewport.releasePointerCapture(e.pointerId);
-      } catch (err) {}
-      syncDots();
-      startAuto();
-    }
-
-    viewport.addEventListener("pointerdown", _onPointerDown, { passive: true });
-    window.addEventListener("pointermove", _onPointerMove, { passive: true });
-    window.addEventListener("pointerup", _onPointerUp, { passive: true });
-
-    function _onTouchStart(e) {
-      if (!e.touches || e.touches.length === 0) return;
-      stopAuto();
-      _isPointerDown = true;
-      _startX = e.touches[0].clientX;
-      _startScroll = viewport.scrollLeft;
-      _isDragging = false;
-    }
-
-    function _onTouchMove(e) {
-      if (!_isPointerDown) return;
-      if (!e.touches || e.touches.length === 0) return;
-      var clientX = e.touches[0].clientX;
-      var dx = clientX - _startX;
-      if (Math.abs(dx) > 6) {
-        if (e.cancelable) e.preventDefault();
-        _isDragging = true;
-        viewport.scrollLeft = _startScroll - dx;
-      }
-    }
-
-    function _onTouchEnd(e) {
-      _isPointerDown = false;
-      _isDragging = false;
-      syncDots();
-      startAuto();
-    }
-
-    viewport.addEventListener("touchstart", _onTouchStart, { passive: true });
-    viewport.addEventListener("touchmove", _onTouchMove, { passive: false });
-    viewport.addEventListener("touchend", _onTouchEnd, { passive: true });
-
-    var ro = null;
-    if (typeof ResizeObserver !== "undefined") {
-      ro = new ResizeObserver(function () {
-        syncDots();
-      });
-      ro.observe(viewport);
-    }
-
-    window.addEventListener("orientationchange", syncDots);
-
+    // initial sync
     syncDots();
-    startAuto();
 
     return function teardown() {
-      viewport.removeEventListener("scroll", onScroll);
-      window.removeEventListener("orientationchange", syncDots);
-      viewport.removeEventListener("pointerdown", _onPointerDown);
-      window.removeEventListener("pointermove", _onPointerMove);
-      window.removeEventListener("pointerup", _onPointerUp);
-      viewport.removeEventListener("touchstart", _onTouchStart);
-      viewport.removeEventListener("touchmove", _onTouchMove);
-      viewport.removeEventListener("touchend", _onTouchEnd);
-      stopAuto();
-      if (ro) {
-        ro.disconnect();
-      }
-      viewport.scrollLeft = 0;
-      dotsEl.innerHTML = "";
+      viewport.removeEventListener('scroll', onScroll);
+      dotsEl.removeEventListener('click', onDotClick);
+      dotsEl.innerHTML = '';
     };
   }
 
