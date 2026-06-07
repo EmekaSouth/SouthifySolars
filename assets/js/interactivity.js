@@ -54,6 +54,38 @@
 
     viewport.addEventListener("scroll", onScroll, { passive: true });
 
+    var _isPointerDown = false;
+    var _startX = 0;
+    var _startScroll = 0;
+
+    function _onPointerDown(e) {
+      _isPointerDown = true;
+      try {
+        viewport.setPointerCapture(e.pointerId);
+      } catch (err) {}
+      _startX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
+      _startScroll = viewport.scrollLeft;
+    }
+
+    function _onPointerMove(e) {
+      if (!_isPointerDown) return;
+      var clientX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
+      var dx = clientX - _startX;
+      viewport.scrollLeft = _startScroll - dx;
+    }
+
+    function _onPointerUp(e) {
+      _isPointerDown = false;
+      try {
+        viewport.releasePointerCapture && viewport.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+      syncDots();
+    }
+
+    viewport.addEventListener("pointerdown", _onPointerDown, { passive: true });
+    window.addEventListener("pointermove", _onPointerMove, { passive: true });
+    window.addEventListener("pointerup", _onPointerUp, { passive: true });
+
     var ro = null;
     if (typeof ResizeObserver !== "undefined") {
       ro = new ResizeObserver(function () {
@@ -69,6 +101,9 @@
     return function teardown() {
       viewport.removeEventListener("scroll", onScroll);
       window.removeEventListener("orientationchange", syncDots);
+  viewport.removeEventListener("pointerdown", _onPointerDown);
+  window.removeEventListener("pointermove", _onPointerMove);
+  window.removeEventListener("pointerup", _onPointerUp);
       if (ro) {
         ro.disconnect();
       }
