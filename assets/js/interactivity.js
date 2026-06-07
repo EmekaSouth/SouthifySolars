@@ -54,6 +54,38 @@
 
     viewport.addEventListener("scroll", onScroll, { passive: true });
 
+    var _isPointerDown = false;
+    var _startX = 0;
+    var _startScroll = 0;
+
+    function _onPointerDown(e) {
+      _isPointerDown = true;
+      try {
+        viewport.setPointerCapture(e.pointerId);
+      } catch (err) {}
+      _startX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
+      _startScroll = viewport.scrollLeft;
+    }
+
+    function _onPointerMove(e) {
+      if (!_isPointerDown) return;
+      var clientX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
+      var dx = clientX - _startX;
+      viewport.scrollLeft = _startScroll - dx;
+    }
+
+    function _onPointerUp(e) {
+      _isPointerDown = false;
+      try {
+        viewport.releasePointerCapture && viewport.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+      syncDots();
+    }
+
+    viewport.addEventListener("pointerdown", _onPointerDown, { passive: true });
+    window.addEventListener("pointermove", _onPointerMove, { passive: true });
+    window.addEventListener("pointerup", _onPointerUp, { passive: true });
+
     var ro = null;
     if (typeof ResizeObserver !== "undefined") {
       ro = new ResizeObserver(function () {
@@ -69,6 +101,9 @@
     return function teardown() {
       viewport.removeEventListener("scroll", onScroll);
       window.removeEventListener("orientationchange", syncDots);
+  viewport.removeEventListener("pointerdown", _onPointerDown);
+  window.removeEventListener("pointermove", _onPointerMove);
+  window.removeEventListener("pointerup", _onPointerUp);
       if (ro) {
         ro.disconnect();
       }
@@ -77,232 +112,329 @@
     };
   }
 
-  function initBrandsMarquee() {
-    var container = document.querySelector(".brands__container");
-    if (!container) {
-      return function () {};
-    }
+//   function initBrandsMarquee() {
+//     var DEFAULT_CYCLE_SEC = 10;
 
-    var track = container.querySelector(".brands__marquee-track");
-    var set = container.querySelector(".brands__marquee-set");
-    if (!track || !set) {
-      return function () {};
-    }
+//     var reduceMotionMq = window.matchMedia(
+//       "(prefers-reduced-motion: reduce)",
+//     );
+//     if (reduceMotionMq.matches) {
+//       return function () {};
+//     }
 
-    if (track.querySelector(".brands__marquee-set--duplicate")) {
-      return function () {};
-    }
+//     var container = document.querySelector(".brands__container");
+//     if (!container) {
+//       return function () {};
+//     }
 
-    var dup = set.cloneNode(true);
-    dup.classList.add("brands__marquee-set--duplicate");
-    dup.setAttribute("aria-hidden", "true");
-    track.appendChild(dup);
-    track.classList.add("brands__marquee-track--animating");
-    void track.offsetWidth;
+//     var track = container.querySelector(".brands__marquee-track");
+//     var set = container.querySelector(".brands__marquee-set");
+//     if (!track || !set) {
+//       return function () {};
+//     }
 
-    return function teardown() {
-      track.classList.remove("brands__marquee-track--animating");
-      var clone = track.querySelector(".brands__marquee-set--duplicate");
-      if (clone) {
-        clone.remove();
-      }
-    };
-  }
+//     if (track.querySelector(".brands__marquee-set--duplicate")) {
+//       return function () {};
+//     }
 
-  var mq = window.matchMedia(MQ);
-  var teardowns = [];
+//     var cycleSec = parseFloat(
+//       container.getAttribute("data-marquee-cycle-sec") || "",
+//     );
+//     if (!isFinite(cycleSec) || cycleSec <= 0) {
+//       cycleSec = DEFAULT_CYCLE_SEC;
+//     }
 
-  function runTeardowns() {
-    for (var i = 0; i < teardowns.length; i++) {
-      if (typeof teardowns[i] === "function") {
-        teardowns[i]();
-      }
-    }
-    teardowns = [];
-  }
+//     var dup = set.cloneNode(true);
+//     dup.classList.add("brands__marquee-set--duplicate");
+//     dup.setAttribute("aria-hidden", "true");
+//     track.appendChild(dup);
+//     track.classList.add("brands__marquee-track--animating");
 
-  function apply() {
-    if (!mq.matches) {
-      runTeardowns();
-      return;
-    }
-    if (teardowns.length > 0) {
-      return;
-    }
-    teardowns.push(initTestimonialCarousel());
-    teardowns.push(initBrandsMarquee());
-  }
+//     var segW = 0;
+//     var x = 0;
+//     var lastT = performance.now();
+//     var rafId = null;
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", apply);
-  } else {
-    apply();
-  }
+//     function measureSeg() {
+//       var w = set.offsetWidth;
+//       if (w > 0) {
+//         segW = w;
+//       }
+//     }
 
-  mq.addEventListener("change", apply);
-})();
+//     function wrapX() {
+//       if (segW <= 0) {
+//         return;
+//       }
+//       while (x <= -segW) {
+//         x += segW;
+//       }
+//       while (x > 0) {
+//         x -= segW;
+//       }
+//     }
 
-(function () {
-  var FORM_ENDPOINT =
-    "https://formsubmit.co/ajax/chukwuemekaobama3@gmail.com";
-  var TOAST_VISIBLE_MS = 4500;
-  var TOAST_ANIM_MS = 350;
+//     measureSeg();
+//     void track.offsetWidth;
+//     measureSeg();
 
-  function initContactForm() {
-    var form = document.querySelector("[data-contact-form]");
-    if (!form) {
-      return;
-    }
+//     function tick(now) {
+//       if (segW <= 0) {
+//         measureSeg();
+//       }
+//       var dt = (now - lastT) / 1000;
+//       lastT = now;
+//       if (dt > 0.064) {
+//         dt = 0.064;
+//       }
+//       if (segW > 0) {
+//         x -= (segW / cycleSec) * dt;
+//         wrapX();
+//         track.style.transform =
+//           "translate3d(" + x.toFixed(2) + "px,0,0)";
+//       }
+//       rafId = requestAnimationFrame(tick);
+//     }
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+//     function onVis() {
+//       if (document.hidden) {
+//         if (rafId != null) {
+//           cancelAnimationFrame(rafId);
+//           rafId = null;
+//         }
+//       } else {
+//         lastT = performance.now();
+//         if (rafId == null) {
+//           rafId = requestAnimationFrame(tick);
+//         }
+//       }
+//     }
 
-      var submitBtn = form.querySelector(".contactus__submit");
-      if (submitBtn) {
-        submitBtn.disabled = true;
-      }
+//     rafId = requestAnimationFrame(tick);
 
-      var nameEl = form.querySelector(".contactus__form-name");
-      var emailEl = form.querySelector(".contactus__form-email");
-      var phoneEl = form.querySelector(".contactus__form-number");
-      var messageEl = form.querySelector(".contactus__form__messages");
+//     document.addEventListener("visibilitychange", onVis);
 
-      fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          name: nameEl ? nameEl.value.trim() : "",
-          email: emailEl ? emailEl.value.trim() : "",
-          phone: phoneEl ? phoneEl.value.trim() : "",
-          message: messageEl ? messageEl.value.trim() : "",
-          _subject: "New Contact — Southify Solars",
-          _template: "table",
-        }),
-      })
-        .then(function (response) {
-          return response.json().then(function (data) {
-            return { ok: response.ok, data: data };
-          });
-        })
-        .then(function (result) {
-          if (isFormSubmitSuccess(result.data)) {
-            form.reset();
-            showFormToast("success");
-            return;
-          }
-          showFormToast("error", getFormSubmitErrorMessage(result.data));
-        })
-        .catch(function () {
-          showFormToast(
-            "error",
-            "Please check your internet connection and try again.",
-          );
-        })
-        .finally(function () {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-          }
-        });
-    });
-  }
+//     var ro = null;
+//     if (typeof ResizeObserver !== "undefined") {
+//       ro = new ResizeObserver(function () {
+//         measureSeg();
+//         wrapX();
+//       });
+//       ro.observe(track);
+//     }
 
-  function isFormSubmitSuccess(data) {
-    if (!data) {
-      return false;
-    }
-    var success = data.success;
-    return success === true || success === "true";
-  }
+//     return function teardown() {
+//       document.removeEventListener("visibilitychange", onVis);
+//       if (rafId != null) {
+//         cancelAnimationFrame(rafId);
+//         rafId = null;
+//       }
+//       if (ro) {
+//         ro.disconnect();
+//       }
+//       track.style.transform = "";
+//       track.classList.remove("brands__marquee-track--animating");
+//       var clone = track.querySelector(".brands__marquee-set--duplicate");
+//       if (clone) {
+//         clone.remove();
+//       }
+//     };
+//   }
 
-  function getFormSubmitErrorMessage(data) {
-    if (data && data.message) {
-      var msg = String(data.message);
-      if (/web server|html files/i.test(msg)) {
-        return "This form must be opened through a web server (for example, Live Server), not as a local file.";
-      }
-      if (/activate|confirmation/i.test(msg)) {
-        return "Email delivery is not active yet. Please confirm the activation link sent to the site owner’s inbox, then try again.";
-      }
-      return msg;
-    }
-    return "Something went wrong while sending your message. Please try again shortly.";
-  }
+//   var mq = window.matchMedia(MQ);
+//   var teardowns = [];
 
-  var TOAST_ICONS = {
-    success:
-      '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>',
-    error:
-      '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>',
-  };
+//   function runTeardowns() {
+//     for (var i = 0; i < teardowns.length; i++) {
+//       if (typeof teardowns[i] === "function") {
+//         teardowns[i]();
+//       }
+//     }
+//     teardowns = [];
+//   }
 
-  var TOAST_COPY = {
-    success: {
-      title: "Message Sent Successfully!",
-      text: "Your message has been delivered. We will get back to you soon.",
-    },
-    error: {
-      title: "Unable to Send Message",
-      text: "Something went wrong while sending your message. Please try again shortly.",
-    },
-  };
+//   function apply() {
+//     if (!mq.matches) {
+//       runTeardowns();
+//       return;
+//     }
+//     if (teardowns.length > 0) {
+//       return;
+//     }
+//     teardowns.push(initTestimonialCarousel());
+//     teardowns.push(initBrandsMarquee());
+//   }
 
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
+//   if (document.readyState === "loading") {
+//     document.addEventListener("DOMContentLoaded", apply);
+//   } else {
+//     apply();
+//   }
 
-  function showFormToast(type, textOverride) {
-    var existing = document.querySelector(".form-toast");
-    if (existing) {
-      existing.remove();
-    }
+//   mq.addEventListener("change", apply);
+// })();
 
-    var copy = TOAST_COPY[type] || TOAST_COPY.error;
-    var iconPath = TOAST_ICONS[type] || TOAST_ICONS.error;
-    var modifier = type === "success" ? "" : " form-toast--error";
+// (function () {
+//   var FORM_ENDPOINT =
+//     "https://formsubmit.co/ajax/chukwuemekaobama3@gmail.com";
+//   var TOAST_VISIBLE_MS = 4500;
+//   var TOAST_ANIM_MS = 350;
 
-    var toast = document.createElement("div");
-    toast.className = "form-toast" + modifier;
-    toast.setAttribute("role", "alert");
-    toast.setAttribute("aria-live", "polite");
-    toast.innerHTML =
-      '<svg class="form-toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">' +
-      iconPath +
-      "</svg>" +
-      '<div class="form-toast__body">' +
-      '<p class="form-toast__title">' +
-      copy.title +
-      "</p>" +
-      '<p class="form-toast__text">' +
-      escapeHtml(textOverride || copy.text) +
-      "</p>" +
-      "</div>";
+//   function initContactForm() {
+//     var form = document.querySelector("[data-contact-form]");
+//     if (!form) {
+//       return;
+//     }
 
-    document.body.appendChild(toast);
+//     form.addEventListener("submit", function (e) {
+//       e.preventDefault();
 
-    requestAnimationFrame(function () {
-      toast.classList.add("form-toast--visible");
-    });
+//       var submitBtn = form.querySelector(".contactus__submit");
+//       if (submitBtn) {
+//         submitBtn.disabled = true;
+//       }
 
-    window.setTimeout(function () {
-      toast.classList.remove("form-toast--visible");
-      toast.classList.add("form-toast--leaving");
-    }, TOAST_VISIBLE_MS);
+//       var nameEl = form.querySelector(".contactus__form-name");
+//       var emailEl = form.querySelector(".contactus__form-email");
+//       var phoneEl = form.querySelector(".contactus__form-number");
+//       var messageEl = form.querySelector(".contactus__form__messages");
 
-    window.setTimeout(function () {
-      toast.remove();
-    }, TOAST_VISIBLE_MS + TOAST_ANIM_MS);
-  }
+//       fetch(FORM_ENDPOINT, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Accept: "application/json",
+//         },
+//         body: JSON.stringify({
+//           name: nameEl ? nameEl.value.trim() : "",
+//           email: emailEl ? emailEl.value.trim() : "",
+//           phone: phoneEl ? phoneEl.value.trim() : "",
+//           message: messageEl ? messageEl.value.trim() : "",
+//           _subject: "New Contact — Southify Solars",
+//           _template: "table",
+//         }),
+//       })
+//         .then(function (response) {
+//           return response.json().then(function (data) {
+//             return { ok: response.ok, data: data };
+//           });
+//         })
+//         .then(function (result) {
+//           if (isFormSubmitSuccess(result.data)) {
+//             form.reset();
+//             showFormToast("success");
+//             return;
+//           }
+//           showFormToast("error", getFormSubmitErrorMessage(result.data));
+//         })
+//         .catch(function () {
+//           showFormToast(
+//             "error",
+//             "Please check your internet connection and try again.",
+//           );
+//         })
+//         .finally(function () {
+//           if (submitBtn) {
+//             submitBtn.disabled = false;
+//           }
+//         });
+//     });
+//   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initContactForm);
-  } else {
-    initContactForm();
-  }
-})();
+//   function isFormSubmitSuccess(data) {
+//     if (!data) {
+//       return false;
+//     }
+//     var success = data.success;
+//     return success === true || success === "true";
+//   }
+
+//   function getFormSubmitErrorMessage(data) {
+//     if (data && data.message) {
+//       var msg = String(data.message);
+//       if (/web server|html files/i.test(msg)) {
+//         return "This form must be opened through a web server (for example, Live Server), not as a local file.";
+//       }
+//       if (/activate|confirmation/i.test(msg)) {
+//         return "Email delivery is not active yet. Please confirm the activation link sent to the site owner’s inbox, then try again.";
+//       }
+//       return msg;
+//     }
+//     return "Something went wrong while sending your message. Please try again shortly.";
+//   }
+
+//   var TOAST_ICONS = {
+//     success:
+//       '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>',
+//     error:
+//       '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>',
+//   };
+
+//   var TOAST_COPY = {
+//     success: {
+//       title: "Message Sent Successfully!",
+//       text: "Your message has been delivered. We will get back to you soon.",
+//     },
+//     error: {
+//       title: "Unable to Send Message",
+//       text: "Something went wrong while sending your message. Please try again shortly.",
+//     },
+//   };
+
+//   function escapeHtml(str) {
+//     return String(str)
+//       .replace(/&/g, "&amp;")
+//       .replace(/</g, "&lt;")
+//       .replace(/>/g, "&gt;")
+//       .replace(/"/g, "&quot;");
+//   }
+
+//   function showFormToast(type, textOverride) {
+//     var existing = document.querySelector(".form-toast");
+//     if (existing) {
+//       existing.remove();
+//     }
+
+//     var copy = TOAST_COPY[type] || TOAST_COPY.error;
+//     var iconPath = TOAST_ICONS[type] || TOAST_ICONS.error;
+//     var modifier = type === "success" ? "" : " form-toast--error";
+
+//     var toast = document.createElement("div");
+//     toast.className = "form-toast" + modifier;
+//     toast.setAttribute("role", "alert");
+//     toast.setAttribute("aria-live", "polite");
+//     toast.innerHTML =
+//       '<svg class="form-toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">' +
+//       iconPath +
+//       "</svg>" +
+//       '<div class="form-toast__body">' +
+//       '<p class="form-toast__title">' +
+//       copy.title +
+//       "</p>" +
+//       '<p class="form-toast__text">' +
+//       escapeHtml(textOverride || copy.text) +
+//       "</p>" +
+//       "</div>";
+
+//     document.body.appendChild(toast);
+
+//     requestAnimationFrame(function () {
+//       toast.classList.add("form-toast--visible");
+//     });
+
+//     window.setTimeout(function () {
+//       toast.classList.remove("form-toast--visible");
+//       toast.classList.add("form-toast--leaving");
+//     }, TOAST_VISIBLE_MS);
+
+//     window.setTimeout(function () {
+//       toast.remove();
+//     }, TOAST_VISIBLE_MS + TOAST_ANIM_MS);
+//   }
+
+//   if (document.readyState === "loading") {
+//     document.addEventListener("DOMContentLoaded", initContactForm);
+//   } else {
+//     initContactForm();
+//   }
+// })();

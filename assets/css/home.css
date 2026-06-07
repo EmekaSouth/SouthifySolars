@@ -913,6 +913,7 @@ button {
     justify-content: center;
     align-items: center;
     margin-bottom: 70px;
+    background-color: #fff;
   }
 
   .testimonial-container {
@@ -941,8 +942,12 @@ button {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    touch-action: pan-x pinch-zoom;
+    touch-action: pan-x;
     overscroll-behavior-x: contain;
+  }
+
+  .testimonial__card-container {
+    justify-content: left;
   }
 
   .testimonial__carousel-viewport::-webkit-scrollbar {
@@ -979,9 +984,7 @@ button {
     border-radius: 50%;
     background-color: rgb(255, 255, 255);
     pointer-events: none;
-    transition:
-      background-color 0.2s ease,
-      transform 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
   }
 
   .testimonial__carousel-dot--active {
@@ -994,6 +997,8 @@ button {
     justify-content: center;
     align-items: center;
   }
+
+  /* Brand Section Mobile */
 
   .brands {
     margin-top: 50px;
@@ -1044,15 +1049,16 @@ button {
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    gap: 2.5rem;
-    padding-right: 2.5rem;
+    justify-content: center;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    padding-right: clamp(1.5rem, 4vw, 2.5rem);
   }
 
   .brands__marquee-set img {
     flex-shrink: 0;
     width: auto;
-    max-width: min(110px, 22vw);
-    max-height: 44px;
+    max-width: min(90px, 18vw);
+    max-height: 40px;
     height: auto;
     object-fit: contain;
   }
