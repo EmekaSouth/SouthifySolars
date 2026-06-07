@@ -942,7 +942,7 @@ button {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    touch-action: pan-x pinch-zoom;
+    touch-action: pan-x;
     overscroll-behavior-x: contain;
   }
 
