@@ -453,6 +453,7 @@ button {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     padding: 10px;
+    justify-items: center;
   }
 
   .hero__img-container img {

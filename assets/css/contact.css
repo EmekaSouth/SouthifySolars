@@ -254,7 +254,6 @@ textarea {
 
   .group__1,
   .group__2 {
-    flex-wrap: wrap;
     gap: var(--content-gap);
   }
 
@@ -287,7 +286,6 @@ textarea {
   }
 
   .contact__container {
-    flex-wrap: wrap;
     gap: clamp(2rem, 5vw, 5rem);
   }
 
@@ -315,7 +313,6 @@ textarea {
   .contactus__form-name,
   .contactus__form-email {
     width: min(50%, 100%);
-    flex: 1 1 220px;
   }
 
   .contact__container {
@@ -323,13 +320,13 @@ textarea {
   }
 }
 
-@media screen and (max-width: 865px) {
+@media screen and (max-width: 1300px) {
   .contact__img {
-    display: none;
+    width: 50%;
   }
 
   .group__1 {
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .contactus__form-name,
@@ -339,7 +336,7 @@ textarea {
   }
 
   .contact__container {
-    flex-direction: column;
+    flex-direction: row;
   }
 }
 
@@ -450,6 +447,10 @@ textarea {
     font-family: var(--roboto);
     font-size: 25px;
     color: var(--blue-black);
+  }
+
+  .contact__img {
+    display: none !important;
   }
 
   .contact__contact-form {

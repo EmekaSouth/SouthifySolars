@@ -223,3 +223,79 @@ footer ul li {
     margin-left: 0;
   }
 }
+
+/* Language selection modal (lightweight, matches brand) */
+.lang-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  z-index: 1200;
+}
+.lang-modal-overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.lang-modal {
+  background: var(--white);
+  color: var(--text-grey);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: min(520px, 92%);
+  box-shadow: var(--box-shadow);
+  text-align: center;
+}
+.lang-modal__title {
+  margin-bottom: 0.25rem;
+  font-family: var(--inter);
+  color: var(--blue);
+}
+.lang-modal__subtitle {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: var(--slate-grey);
+}
+.lang-modal__choices {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.lang-modal__choice {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--grey);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--inter);
+}
+.lang-modal__choice[data-lang="en"] {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+.lang-modal__choice[data-lang="fr"] {
+  background: #f5f7fb;
+}
+.lang-modal__choice[data-lang="ar"] {
+  background: #fff;
+}
+
+/* Footer language buttons */
+.footer__lang-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: var(--inter);
+  cursor: pointer;
+}
+
+/* Small RTL helper: when .is-rtl is on body, allow simple alignment flips */
+body.is-rtl {
+  direction: rtl;
+}

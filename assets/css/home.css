@@ -514,6 +514,12 @@ button {
   gap: 5rem;
 }
 
+.brands__marquee-set img {
+  max-width: clamp(120px, 15vw, 180px);
+  height: auto;
+  object-fit: contain;
+}
+
 /* Media Queries */
 
 @media screen and (max-width: 1399px) {
@@ -978,9 +984,7 @@ button {
     border-radius: 50%;
     background-color: rgb(255, 255, 255);
     pointer-events: none;
-    transition:
-      background-color 0.2s ease,
-      transform 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
   }
 
   .testimonial__carousel-dot--active {
@@ -1045,15 +1049,16 @@ button {
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    gap: 2.5rem;
-    padding-right: 2.5rem;
+    justify-content: center;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    padding-right: clamp(1.5rem, 4vw, 2.5rem);
   }
 
   .brands__marquee-set img {
     flex-shrink: 0;
     width: auto;
-    max-width: min(110px, 22vw);
-    max-height: 44px;
+    max-width: min(90px, 18vw);
+    max-height: 40px;
     height: auto;
     object-fit: contain;
   }
