@@ -1,62 +1,59 @@
-/* Font Imports */
-
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap");
-
-/* Variables */
-
-:root {
-  /* Color */
-  --blue: #36689e;
-  --light-blue: #f3fafa;
-  --black: #000000;
-  --blue-black: #252b42;
-  --slate-grey: #7c8893;
-  --text-grey: #3f3f3f;
-  --grey: #e4e7ec;
-  --white: #ffffff;
-  --box-shadow: 0px 12.35px 25.69px 0px #36689e29;
-  --btn-shadow: 12.35px 12.35px 24.69px 0px #0000001a;
-  --card-shadow: 8px 10px 20px 1px #98989829;
-  --form-shadow: 0px 5px 30px 0px #00000017;
-
-  /* Font Family */
-  --inter: "Inter", system-ui, sans-serif;
-  --roboto: "Roboto", system-ui, sans-serif;
-  --space-grotesk: "Space Grotesk", system-ui, sans-serif;
-  --poppins: "Poppins", system-ui, sans-serif;
-  --monsterrat: "Montserrat", system-ui, sans-serif;
-
-  /* Typography */
-  --fs-small: clamp(0.8125rem, 0.75rem + 0.2vw, 0.875rem);
-  --fs-medium: clamp(1rem, 0.92rem + 0.4vw, 1.5rem);
-  --fs-big: clamp(1.375rem, 1.05rem + 1vw, 2.5rem);
-  --fs-extra-large: clamp(1.875rem, 1.35rem + 1.75vw, 3rem);
-  --small: var(--fs-small);
-  --medium: var(--fs-medium);
-  --big: var(--fs-big);
-
-  /* Border Radius Sizes */
-  --radius-sm: 5px;
-  --radius-md: 12px;
-  --radius-lg: 15px;
-
-  /* Spacing */
-  --padding-section: 15px;
-  --padding-section-pc: 70px;
+.lang-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
-@media screen and (max-width: 1399px) {
-  :root {
-    --padding-section-pc: clamp(0.9375rem, 5vw, 4.375rem);
-  }
+.lang-modal {
+  width: min(420px, 90%);
+  background: var(--white);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--box-shadow);
+}
+
+.lang-modal__title {
+  font-family: var(--roboto);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 0.25rem;
+}
+
+.lang-modal__subtitle {
+  font-family: var(--roboto);
+  font-size: 0.95rem;
+  color: var(--slate-grey);
+  margin-bottom: 1rem;
+}
+
+.lang-modal__choices {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.lang-modal__choice {
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  background: var(--light-blue);
+  font-weight: 600;
+  font-family: var(--roboto);
+}
+
+.footer__lang-btn {
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+.is-rtl {
+  direction: rtl;
 }
 
 .footer {
@@ -222,9 +219,12 @@ footer ul li {
     margin-bottom: 20px;
     margin-left: 0;
   }
+
+  .footer__content-start-img {
+    display: block;
+  }
 }
 
-/* Language selection modal (lightweight, matches brand) */
 .lang-modal-overlay {
   position: fixed;
   inset: 0;

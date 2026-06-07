@@ -189,7 +189,6 @@
   function applyLanguage(lang) {
     var dict = translations[lang] || translations[DEFAULT_LANG];
 
-    // set lang attribute and dir
     document.documentElement.lang = lang === "ar" ? "ar" : "en";
     if (lang === "ar") {
       document.documentElement.setAttribute("dir", "rtl");
@@ -207,7 +206,6 @@
         var key = m.key;
         var txt = dict[key];
         if (!txt) continue;
-        // placeholders and values
         if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
           el.placeholder = txt;
         } else if (el.tagName === "IMG") {
@@ -228,9 +226,9 @@
             text.toLowerCase().indexOf("arab") >= 0
               ? "ar"
               : text.toLowerCase().indexOf("fr") >= 0 ||
-                text.toLowerCase().indexOf("français") >= 0
-              ? "fr"
-              : "en";
+                  text.toLowerCase().indexOf("français") >= 0
+                ? "fr"
+                : "en";
           var btn = document.createElement("button");
           btn.type = "button";
           btn.className = "footer__lang-btn";
@@ -255,8 +253,8 @@
                 code2 === "fr"
                   ? "french"
                   : code2 === "ar"
-                  ? "arabic"
-                  : "english"
+                    ? "arabic"
+                    : "english"
               ];
           }
         }
@@ -285,9 +283,8 @@
       }
     }
 
-    // placeholders
     var inputs = document.querySelectorAll(
-      "input[placeholder], textarea[placeholder]"
+      "input[placeholder], textarea[placeholder]",
     );
     for (var j = 0; j < inputs.length; j++) {
       var inp = inputs[j];
@@ -305,7 +302,6 @@
     closeLanguageModal();
   }
 
-  // modal
   var modalEl = null;
 
   function createLanguageModal(dict) {
@@ -382,7 +378,6 @@
       .replace(/"/g, "&quot;");
   }
 
-  // init
   function init() {
     var saved = localStorage.getItem(STORAGE_KEY);
     var lang = saved || DEFAULT_LANG;
