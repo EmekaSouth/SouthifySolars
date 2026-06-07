@@ -86,6 +86,39 @@
     window.addEventListener("pointermove", _onPointerMove, { passive: true });
     window.addEventListener("pointerup", _onPointerUp, { passive: true });
 
+    // Touch event fallback for browsers without Pointer Events (older iOS/Android)
+    function _onTouchStart(e) {
+      if (!e.touches || e.touches.length === 0) return;
+      _isPointerDown = true;
+      _startX = e.touches[0].clientX;
+      _startScroll = viewport.scrollLeft;
+      _isDragging = false;
+    }
+
+    function _onTouchMove(e) {
+      if (!_isPointerDown) return;
+      if (!e.touches || e.touches.length === 0) return;
+      var clientX = e.touches[0].clientX;
+      var dx = clientX - _startX;
+      // small threshold to avoid interfering with vertical scroll
+      if (Math.abs(dx) > 6) {
+        // prevent vertical page scroll while interacting horizontally
+        if (e.cancelable) e.preventDefault();
+        _isDragging = true;
+        viewport.scrollLeft = _startScroll - dx;
+      }
+    }
+
+    function _onTouchEnd(e) {
+      _isPointerDown = false;
+      _isDragging = false;
+      syncDots();
+    }
+
+    viewport.addEventListener("touchstart", _onTouchStart, { passive: true });
+    viewport.addEventListener("touchmove", _onTouchMove, { passive: false });
+    viewport.addEventListener("touchend", _onTouchEnd, { passive: true });
+
     var ro = null;
     if (typeof ResizeObserver !== "undefined") {
       ro = new ResizeObserver(function () {
@@ -104,6 +137,9 @@
   viewport.removeEventListener("pointerdown", _onPointerDown);
   window.removeEventListener("pointermove", _onPointerMove);
   window.removeEventListener("pointerup", _onPointerUp);
+  viewport.removeEventListener("touchstart", _onTouchStart);
+  viewport.removeEventListener("touchmove", _onTouchMove);
+  viewport.removeEventListener("touchend", _onTouchEnd);
       if (ro) {
         ro.disconnect();
       }
