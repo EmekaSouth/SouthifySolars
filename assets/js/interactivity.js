@@ -57,19 +57,47 @@
     var _isPointerDown = false;
     var _startX = 0;
     var _startScroll = 0;
+    var autoTimer = null;
+    var AUTO_MS = 5000; // 5 seconds
+
+    function nextSlide() {
+      var i = activeIndex();
+      var nxt = (i + 1) % slides.length;
+      var left = nxt * (viewport.clientWidth || 0);
+      try {
+        viewport.scrollTo({ left: left, behavior: "smooth" });
+      } catch (err) {
+        viewport.scrollLeft = left;
+      }
+    }
+
+    function stopAuto() {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+    }
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = setInterval(nextSlide, AUTO_MS);
+    }
 
     function _onPointerDown(e) {
+      stopAuto();
       _isPointerDown = true;
       try {
         viewport.setPointerCapture(e.pointerId);
       } catch (err) {}
-      _startX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
+      _startX =
+        e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
       _startScroll = viewport.scrollLeft;
     }
 
     function _onPointerMove(e) {
       if (!_isPointerDown) return;
-      var clientX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
+      var clientX =
+        e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
       var dx = clientX - _startX;
       viewport.scrollLeft = _startScroll - dx;
     }
@@ -77,18 +105,20 @@
     function _onPointerUp(e) {
       _isPointerDown = false;
       try {
-        viewport.releasePointerCapture && viewport.releasePointerCapture(e.pointerId);
+        viewport.releasePointerCapture &&
+          viewport.releasePointerCapture(e.pointerId);
       } catch (err) {}
       syncDots();
+      startAuto();
     }
 
     viewport.addEventListener("pointerdown", _onPointerDown, { passive: true });
     window.addEventListener("pointermove", _onPointerMove, { passive: true });
     window.addEventListener("pointerup", _onPointerUp, { passive: true });
 
-    // Touch event fallback for browsers without Pointer Events (older iOS/Android)
     function _onTouchStart(e) {
       if (!e.touches || e.touches.length === 0) return;
+      stopAuto();
       _isPointerDown = true;
       _startX = e.touches[0].clientX;
       _startScroll = viewport.scrollLeft;
@@ -100,9 +130,7 @@
       if (!e.touches || e.touches.length === 0) return;
       var clientX = e.touches[0].clientX;
       var dx = clientX - _startX;
-      // small threshold to avoid interfering with vertical scroll
       if (Math.abs(dx) > 6) {
-        // prevent vertical page scroll while interacting horizontally
         if (e.cancelable) e.preventDefault();
         _isDragging = true;
         viewport.scrollLeft = _startScroll - dx;
@@ -113,6 +141,7 @@
       _isPointerDown = false;
       _isDragging = false;
       syncDots();
+      startAuto();
     }
 
     viewport.addEventListener("touchstart", _onTouchStart, { passive: true });
@@ -130,16 +159,18 @@
     window.addEventListener("orientationchange", syncDots);
 
     syncDots();
+    startAuto();
 
     return function teardown() {
       viewport.removeEventListener("scroll", onScroll);
       window.removeEventListener("orientationchange", syncDots);
-  viewport.removeEventListener("pointerdown", _onPointerDown);
-  window.removeEventListener("pointermove", _onPointerMove);
-  window.removeEventListener("pointerup", _onPointerUp);
-  viewport.removeEventListener("touchstart", _onTouchStart);
-  viewport.removeEventListener("touchmove", _onTouchMove);
-  viewport.removeEventListener("touchend", _onTouchEnd);
+      viewport.removeEventListener("pointerdown", _onPointerDown);
+      window.removeEventListener("pointermove", _onPointerMove);
+      window.removeEventListener("pointerup", _onPointerUp);
+      viewport.removeEventListener("touchstart", _onTouchStart);
+      viewport.removeEventListener("touchmove", _onTouchMove);
+      viewport.removeEventListener("touchend", _onTouchEnd);
+      stopAuto();
       if (ro) {
         ro.disconnect();
       }
@@ -151,9 +182,7 @@
   function initBrandsMarquee() {
     var DEFAULT_CYCLE_SEC = 10;
 
-    var reduceMotionMq = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    );
+    var reduceMotionMq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (reduceMotionMq.matches) {
       return function () {};
     }
@@ -174,7 +203,7 @@
     }
 
     var cycleSec = parseFloat(
-      container.getAttribute("data-marquee-cycle-sec") || "",
+      container.getAttribute("data-marquee-cycle-sec") || ""
     );
     if (!isFinite(cycleSec) || cycleSec <= 0) {
       cycleSec = DEFAULT_CYCLE_SEC;
@@ -226,8 +255,7 @@
       if (segW > 0) {
         x -= (segW / cycleSec) * dt;
         wrapX();
-        track.style.transform =
-          "translate3d(" + x.toFixed(2) + "px,0,0)";
+        track.style.transform = "translate3d(" + x.toFixed(2) + "px,0,0)";
       }
       rafId = requestAnimationFrame(tick);
     }
@@ -311,8 +339,7 @@
 })();
 
 (function () {
-  var FORM_ENDPOINT =
-    "https://formsubmit.co/ajax/chukwuemekaobama3@gmail.com";
+  var FORM_ENDPOINT = "https://formsubmit.co/ajax/chukwuemekaobama3@gmail.com";
   var TOAST_VISIBLE_MS = 4500;
   var TOAST_ANIM_MS = 350;
 
@@ -366,7 +393,7 @@
         .catch(function () {
           showFormToast(
             "error",
-            "Please check your internet connection and try again.",
+            "Please check your internet connection and try again."
           );
         })
         .finally(function () {
