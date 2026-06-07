@@ -329,6 +329,10 @@ body.menu-open {
     padding-right: 0;
   }
 
+  .header__navlinks {
+    padding-right: 0 !important;
+  }
+
   .header__mobile-btn {
     display: flex;
     justify-content: center;
